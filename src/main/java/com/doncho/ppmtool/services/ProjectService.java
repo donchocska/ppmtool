@@ -14,7 +14,7 @@ public class ProjectService
     public Project saveOrUpdateProject(Project project)
     {
         //Logic
-        return  projectRepository.save(project);
+        return projectRepository.save(project);
     }
 
 }

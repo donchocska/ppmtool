@@ -1,17 +1,22 @@
 package com.doncho.ppmtool.web;
 
 import com.doncho.ppmtool.domain.Project;
+import com.doncho.ppmtool.services.MapValidationErrorService;
 import com.doncho.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/project")
@@ -20,12 +25,16 @@ public class ProjectController
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private MapValidationErrorService mapValService;
+
     @PostMapping("")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result)
     {
-        if(result.hasErrors())
+        ResponseEntity<?> responseE = mapValService.mapValidationService(result);
+        if (null != responseE) //Negative scenario
         {
-            return new ResponseEntity<String>("Invalid object:[" + result.getAllErrors()+"]", HttpStatus.BAD_REQUEST);
+            return responseE;
         }
 
         Project project1 = projectService.saveOrUpdateProject(project);
