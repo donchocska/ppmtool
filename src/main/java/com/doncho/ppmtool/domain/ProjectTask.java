@@ -1,5 +1,6 @@
 package com.doncho.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.validation.FieldError;
 
@@ -26,13 +27,17 @@ public class ProjectTask
 
     private int priority;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date dueDate;
+
     @Column(updatable = false)
     private String projectIdentifier;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date create_At;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date update_At;
-
 
     //ManyToOne to Backlog
     @ManyToOne(fetch = FetchType.EAGER)
@@ -46,17 +51,6 @@ public class ProjectTask
         //Default constructor
     }
 
-    @PrePersist
-    protected void onCreate()
-    {
-        this.create_At = new Date();
-    }
-
-    @PreUpdate
-    protected void onUodate()
-    {
-        this.update_At = new Date();
-    }
 
     public long getId()
     {
@@ -118,6 +112,26 @@ public class ProjectTask
         this.priority = priority;
     }
 
+    public Backlog getBacklog()
+    {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog)
+    {
+        this.backlog = backlog;
+    }
+
+    public Date getDueDate()
+    {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate)
+    {
+        this.dueDate = dueDate;
+    }
+
     public String getProjectIdentifier()
     {
         return projectIdentifier;
@@ -148,14 +162,14 @@ public class ProjectTask
         this.update_At = update_At;
     }
 
-    public Backlog getBacklog()
-    {
-        return backlog;
+    @PrePersist
+    protected void onCreate(){
+        this.create_At = new Date();
     }
 
-    public void setBacklog(Backlog backlog)
-    {
-        this.backlog = backlog;
+    @PreUpdate
+    protected void onUpdate(){
+        this.update_At = new Date();
     }
 
     @Override
@@ -168,9 +182,11 @@ public class ProjectTask
                 ", acceptanceCriteria='" + acceptanceCriteria + '\'' +
                 ", status='" + status + '\'' +
                 ", priority=" + priority +
+                ", dueDate=" + dueDate +
                 ", projectIdentifier='" + projectIdentifier + '\'' +
                 ", create_At=" + create_At +
                 ", update_At=" + update_At +
+                ", backlog=" + backlog +
                 '}';
     }
 }
