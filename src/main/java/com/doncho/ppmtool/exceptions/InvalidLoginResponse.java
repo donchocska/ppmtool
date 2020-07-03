@@ -2,22 +2,22 @@ package com.doncho.ppmtool.exceptions;
 
 public class InvalidLoginResponse
 {
-    private String username, password;
+    private String userName, password;
 
     public InvalidLoginResponse()
     {
-        this.username = "Invalid Username";
+        this.userName = "Invalid Username";
         this.password = "Invalid Password";
     }
 
     public String getUsername()
     {
-        return username;
+        return userName;
     }
 
     public void setUsername(String username)
     {
-        this.username = username;
+        this.userName = username;
     }
 
     public String getPassword()
