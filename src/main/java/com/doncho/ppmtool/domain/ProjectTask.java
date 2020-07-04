@@ -25,7 +25,7 @@ public class ProjectTask
 
     private String status;
 
-    private int priority;
+    private Integer priority;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dueDate;
@@ -102,12 +102,12 @@ public class ProjectTask
         this.status = status;
     }
 
-    public int getPriority()
+    public Integer getPriority()
     {
         return priority;
     }
 
-    public void setPriority(int priority)
+    public void setPriority(Integer  priority)
     {
         this.priority = priority;
     }
