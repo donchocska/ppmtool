@@ -1,15 +1,18 @@
 package com.doncho.ppmtool.web;
 
 import com.doncho.ppmtool.domain.Project;
+import com.doncho.ppmtool.domain.User;
 import com.doncho.ppmtool.services.MapValidationErrorService;
 import com.doncho.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/project")
@@ -23,7 +26,7 @@ public class ProjectController
     private MapValidationErrorService mapValService;
 
     @PostMapping("")
-    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result)
+    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result, Principal principal)
     {
         ResponseEntity<?> responseE = mapValService.mapValidationService(result);
         if (null != responseE) //Negative scenario
@@ -31,7 +34,7 @@ public class ProjectController
             return responseE;
         }
 
-        Project project1 = projectService.saveOrUpdateProject(project);
+        Project project1 = projectService.saveOrUpdateProject(project, ((User)((UsernamePasswordAuthenticationToken)principal).getPrincipal()).getUserName());
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
     }
 

@@ -2,9 +2,11 @@ package com.doncho.ppmtool.services;
 
 import com.doncho.ppmtool.domain.Backlog;
 import com.doncho.ppmtool.domain.Project;
+import com.doncho.ppmtool.domain.User;
 import com.doncho.ppmtool.exceptions.ProjectIdException;
 import com.doncho.ppmtool.repositories.BacklogRepository;
 import com.doncho.ppmtool.repositories.ProjectRepository;
+import com.doncho.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,18 @@ public class ProjectService
     @Autowired
     private BacklogRepository backlogRepository;
 
-    public Project saveOrUpdateProject(Project project)
+    @Autowired
+    private UserRepository userRepository;
+
+    public Project saveOrUpdateProject(Project project, String userName)
     {
         try
         {
-            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            User user = userRepository.findByUserName(userName);
 
+            project.setUser(user);
+            project.setProjectLeader(user.getUserName());
+            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
             if(0 == project.getId())
             {
@@ -41,7 +49,7 @@ public class ProjectService
 
         } catch (Exception e)
         {
-            throw new ProjectIdException("Project ID" + project.getProjectIdentifier().toUpperCase() + " already exist!");
+            throw new ProjectIdException("Project ID " + project.getProjectIdentifier().toUpperCase() + " already exist!");
         }
     }
 
