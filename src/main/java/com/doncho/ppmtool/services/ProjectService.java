@@ -52,7 +52,7 @@ public class ProjectService
             project.setProjectLeader(user.getUserName());
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
-            if(0 == project.getId())
+            if(null == project.getId() || 0 == project.getId())
             {
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
@@ -60,7 +60,7 @@ public class ProjectService
                 backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
             }
 
-            if(project.getId() != 0 )
+            if(null != project.getId())
             {
                 project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
             }
