@@ -7,7 +7,7 @@ public class LoginRequest
     @NotBlank(message = "UserName cannot be blank!")
     private String userName;
 
-    @NotBlank(message = "UserName cannot be blank!")
+    @NotBlank(message = "Password cannot be blank!")
     private String password;
 
 
